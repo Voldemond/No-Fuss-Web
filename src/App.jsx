@@ -7,6 +7,69 @@ const ScrollSequenceWebsite = () => {
   const frameCount = 64;
   const images = useRef([]);
 
+  // Pricing Calculator State
+  const [selectedService, setSelectedService] = useState('personal');
+  const [selectedOptions, setSelectedOptions] = useState({
+    pages: 1,
+    customDomain: false,
+    hosting: 'free',
+    database: 'none',
+    cms: false,
+    whatsapp: false,
+    maps: false,
+    analytics: false,
+    seo: false,
+    forms: false,
+    ecommerce: false,
+    backend: 'none'
+  });
+
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    description: '',
+    timeline: 'standard',
+    budget: ''
+  });
+
+  // Pricing Logic
+  const calculatePrice = () => {
+    let basePrice = 0;
+
+    // Base service price
+    if (selectedService === 'personal') basePrice = 2000;
+    if (selectedService === 'business') basePrice = 5000;
+    if (selectedService === 'ecommerce') basePrice = 10000;
+    if (selectedService === 'custom') basePrice = 15000;
+
+    // Additional pages
+    if (selectedOptions.pages > 3) {
+      basePrice += (selectedOptions.pages - 3) * 500;
+    }
+
+    // Features
+    if (selectedOptions.customDomain) basePrice += 500;
+    if (selectedOptions.hosting === 'premium') basePrice += 1000;
+    if (selectedOptions.database === 'mysql') basePrice += 1500;
+    if (selectedOptions.database === 'mongodb') basePrice += 2000;
+    if (selectedOptions.cms) basePrice += 2500;
+    if (selectedOptions.whatsapp) basePrice += 200;
+    if (selectedOptions.maps) basePrice += 300;
+    if (selectedOptions.analytics) basePrice += 500;
+    if (selectedOptions.seo) basePrice += 1000;
+    if (selectedOptions.forms) basePrice += 500;
+    if (selectedOptions.ecommerce) basePrice += 5000;
+    if (selectedOptions.backend === 'basic') basePrice += 3000;
+    if (selectedOptions.backend === 'advanced') basePrice += 7000;
+
+    return basePrice;
+  };
+
+  const totalPrice = calculatePrice();
+
+  // Image loading logic
   useEffect(() => {
     const loadImages = async () => {
       const imagePromises = [];
@@ -65,6 +128,38 @@ const ScrollSequenceWebsite = () => {
     }
   }, [currentFrame, imagesLoaded, windowSize]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const message = `New Project Inquiry
+    
+Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone}
+Service: ${selectedService}
+Budget: ₹${totalPrice}
+Timeline: ${formData.timeline}
+
+Description:
+${formData.description}
+
+Selected Features:
+- Pages: ${selectedOptions.pages}
+- Custom Domain: ${selectedOptions.customDomain ? 'Yes' : 'No'}
+- Hosting: ${selectedOptions.hosting}
+- Database: ${selectedOptions.database}
+- Backend: ${selectedOptions.backend}
+- CMS: ${selectedOptions.cms ? 'Yes' : 'No'}
+- WhatsApp Integration: ${selectedOptions.whatsapp ? 'Yes' : 'No'}
+- Google Maps: ${selectedOptions.maps ? 'Yes' : 'No'}
+- Analytics: ${selectedOptions.analytics ? 'Yes' : 'No'}
+- SEO: ${selectedOptions.seo ? 'Yes' : 'No'}
+- Contact Forms: ${selectedOptions.forms ? 'Yes' : 'No'}
+- E-commerce: ${selectedOptions.ecommerce ? 'Yes' : 'No'}`;
+
+    const whatsappUrl = `https://wa.me/919284638487?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
   return (
     <div className="bg-white">
       {/* Hero Canvas Section */}
@@ -98,8 +193,11 @@ const ScrollSequenceWebsite = () => {
               <p className="text-2xl lg:text-4xl text-gray-600 mb-12 font-light tracking-tight">
                 Kunal More — Backend Developer
               </p>
-              <button className="pointer-events-auto bg-black text-white px-12 py-6 rounded-full font-semibold hover:bg-gray-800 transition-all text-lg tracking-wide">
-                GET STARTED
+              <button
+                onClick={() => setShowCalculator(true)}
+                className="pointer-events-auto bg-black text-white px-12 py-6 rounded-full font-semibold hover:bg-gray-800 transition-all text-lg tracking-wide"
+              >
+                CALCULATE YOUR PROJECT
               </button>
             </div>
           </div>
@@ -111,183 +209,161 @@ const ScrollSequenceWebsite = () => {
       {/* Content Sections */}
       <div className="relative bg-white z-10 text-black">
 
-        {/* About Section */}
+        {/* Service Packages */}
         <section className="py-40 px-8 lg:px-16">
           <div className="container mx-auto max-w-7xl">
-            <div className="grid lg:grid-cols-2 gap-24 items-start">
-              <div>
-                <h2 className="text-7xl lg:text-8xl font-black mb-12 tracking-tighter leading-none">
-                  About
-                </h2>
-                <div className="space-y-8 text-xl text-gray-600 leading-relaxed">
-                  <p>
-                    Java Backend & CCM Developer at FCI Company, specializing in enterprise workflows and scalable architectures.
-                  </p>
-                  <p>
-                    Graduate from CDAC's PG-DAC program with expertise in Spring Boot, REST APIs, and modern cloud technologies.
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-12">
-                <div className="border-l-4 border-black pl-8">
-                  <h3 className="text-sm tracking-[0.3em] text-gray-400 mb-3 font-medium">CURRENT</h3>
-                  <p className="text-2xl font-bold">Backend Developer</p>
-                  <p className="text-gray-600">FCI Company — Quadient CCM</p>
-                </div>
-
-                <div className="border-l-4 border-black pl-8">
-                  <h3 className="text-sm tracking-[0.3em] text-gray-400 mb-3 font-medium">EDUCATION</h3>
-                  <p className="text-2xl font-bold">PG-DAC</p>
-                  <p className="text-gray-600">CDAC • BE in IT (7.9 CGPA)</p>
-                </div>
-
-                <div className="border-l-4 border-black pl-8">
-                  <h3 className="text-sm tracking-[0.3em] text-gray-400 mb-3 font-medium">LOCATION</h3>
-                  <p className="text-2xl font-bold">Mumbai, India</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Services Section */}
-        <section className="py-40 px-8 lg:px-16 bg-gray-50">
-          <div className="container mx-auto max-w-7xl">
-            <h2 className="text-7xl lg:text-8xl font-black mb-24 tracking-tighter">
-              Services
+            <h2 className="text-7xl lg:text-8xl font-black mb-12 tracking-tighter">
+              Choose Your<br />Package
             </h2>
+            <p className="text-2xl text-gray-600 mb-24 max-w-3xl">
+              Select a starting point. Every package is fully customizable with additional features.
+            </p>
 
-            <div className="grid lg:grid-cols-2 gap-16">
-              {/* Personal Sites */}
-              <div className="bg-white p-12 group hover:shadow-2xl transition-shadow">
-                <div className="mb-8">
-                  <span className="text-6xl font-black">01</span>
-                </div>
-                <h3 className="text-4xl font-bold mb-6">Personal Websites</h3>
-                <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                  For students, freelancers, and job seekers
-                </p>
-                <ul className="space-y-4 mb-12">
-                  <li className="flex items-start gap-4 text-lg text-gray-700">
-                    <span className="text-2xl">—</span>
-                    <span>1–3 pages, fully responsive</span>
+            <div className="grid lg:grid-cols-4 gap-8">
+              {/* Personal Package */}
+              <div className="bg-white border-4 border-gray-200 p-8 hover:border-black transition-all">
+                <div className="text-6xl font-black mb-4">01</div>
+                <h3 className="text-3xl font-bold mb-4">Personal</h3>
+                <p className="text-gray-600 mb-6">For students, freelancers, job seekers</p>
+                <div className="text-4xl font-black mb-8">₹2,000</div>
+                <ul className="space-y-3 text-sm mb-8">
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>1-3 pages</span>
                   </li>
-                  <li className="flex items-start gap-4 text-lg text-gray-700">
-                    <span className="text-2xl">—</span>
-                    <span>Deployed with custom domain</span>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>Mobile responsive</span>
                   </li>
-                  <li className="flex items-start gap-4 text-lg text-gray-700">
-                    <span className="text-2xl">—</span>
-                    <span>SEO optimized</span>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>Free hosting</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>Contact form</span>
                   </li>
                 </ul>
-                <div className="text-5xl font-black">₹2,000+</div>
+                <button
+                  onClick={() => { setSelectedService('personal'); setShowCalculator(true); }}
+                  className="w-full bg-black text-white py-4 rounded-full font-bold hover:bg-gray-800 transition-all"
+                >
+                  CUSTOMIZE
+                </button>
               </div>
 
-              {/* Business Sites */}
-              <div className="bg-white p-12 group hover:shadow-2xl transition-shadow">
-                <div className="mb-8">
-                  <span className="text-6xl font-black">02</span>
-                </div>
-                <h3 className="text-4xl font-bold mb-6">Business Websites</h3>
-                <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                  For local shops, cafes, and services
-                </p>
-                <ul className="space-y-4 mb-12">
-                  <li className="flex items-start gap-4 text-lg text-gray-700">
-                    <span className="text-2xl">—</span>
-                    <span>Multi-page professional site</span>
+              {/* Business Package */}
+              <div className="bg-white border-4 border-gray-200 p-8 hover:border-black transition-all">
+                <div className="text-6xl font-black mb-4">02</div>
+                <h3 className="text-3xl font-bold mb-4">Business</h3>
+                <p className="text-gray-600 mb-6">For local shops, cafes, services</p>
+                <div className="text-4xl font-black mb-8">₹5,000</div>
+                <ul className="space-y-3 text-sm mb-8">
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>5-8 pages</span>
                   </li>
-                  <li className="flex items-start gap-4 text-lg text-gray-700">
-                    <span className="text-2xl">—</span>
-                    <span>Google Maps & WhatsApp</span>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>Google Maps</span>
                   </li>
-                  <li className="flex items-start gap-4 text-lg text-gray-700">
-                    <span className="text-2xl">—</span>
-                    <span>Contact forms & analytics</span>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>WhatsApp button</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>SEO basics</span>
                   </li>
                 </ul>
-                <div className="text-5xl font-black">₹5,000+</div>
+                <button
+                  onClick={() => { setSelectedService('business'); setShowCalculator(true); }}
+                  className="w-full bg-black text-white py-4 rounded-full font-bold hover:bg-gray-800 transition-all"
+                >
+                  CUSTOMIZE
+                </button>
+              </div>
+
+              {/* E-commerce Package */}
+              <div className="bg-white border-4 border-gray-200 p-8 hover:border-black transition-all">
+                <div className="text-6xl font-black mb-4">03</div>
+                <h3 className="text-3xl font-bold mb-4">E-commerce</h3>
+                <p className="text-gray-600 mb-6">For online stores</p>
+                <div className="text-4xl font-black mb-8">₹10,000</div>
+                <ul className="space-y-3 text-sm mb-8">
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>Product catalog</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>Shopping cart</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>Payment gateway</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>Order management</span>
+                  </li>
+                </ul>
+                <button
+                  onClick={() => { setSelectedService('ecommerce'); setShowCalculator(true); }}
+                  className="w-full bg-black text-white py-4 rounded-full font-bold hover:bg-gray-800 transition-all"
+                >
+                  CUSTOMIZE
+                </button>
+              </div>
+
+              {/* Custom Package */}
+              <div className="bg-black text-white border-4 border-black p-8">
+                <div className="text-6xl font-black mb-4">04</div>
+                <h3 className="text-3xl font-bold mb-4">Custom</h3>
+                <p className="text-gray-400 mb-6">Full-stack applications</p>
+                <div className="text-4xl font-black mb-8">₹15,000+</div>
+                <ul className="space-y-3 text-sm mb-8">
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>Backend API</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>Database setup</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>User authentication</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span>—</span>
+                    <span>Admin panel</span>
+                  </li>
+                </ul>
+                <button
+                  onClick={() => { setSelectedService('custom'); setShowCalculator(true); }}
+                  className="w-full bg-white text-black py-4 rounded-full font-bold hover:bg-gray-200 transition-all"
+                >
+                  CUSTOMIZE
+                </button>
               </div>
             </div>
           </div>
         </section>
 
         {/* Tech Stack */}
-        <section className="py-40 px-8 lg:px-16">
+        <section className="py-40 px-8 lg:px-16 bg-gray-50">
           <div className="container mx-auto max-w-7xl">
             <h2 className="text-7xl lg:text-8xl font-black mb-24 tracking-tighter">
-              Stack
+              Tech Stack
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {['Java', 'Spring Boot', 'React', 'REST APIs', 'MySQL', 'AWS', 'Docker', 'Git'].map((tech) => (
-                <div key={tech} className="text-center py-12 border border-gray-200 hover:border-black transition-colors">
+              {['Java', 'Spring Boot', 'React', 'REST APIs', 'MySQL', 'MongoDB', 'AWS', 'Docker'].map((tech) => (
+                <div key={tech} className="text-center py-12 bg-white border-2 border-gray-200 hover:border-black transition-colors">
                   <span className="text-2xl font-bold">{tech}</span>
                 </div>
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* Process Section */}
-        <section className="py-40 px-8 lg:px-16 bg-black text-white">
-          <div className="container mx-auto max-w-7xl">
-            <h2 className="text-7xl lg:text-8xl font-black mb-24 tracking-tighter">
-              Process
-            </h2>
-
-            <div className="space-y-16">
-              <div className="border-l-4 border-white pl-12">
-                <div className="text-8xl font-black mb-4">01</div>
-                <h3 className="text-4xl font-bold mb-4">Share</h3>
-                <p className="text-xl text-gray-400 leading-relaxed max-w-2xl">
-                  Tell me your requirements via WhatsApp or email
-                </p>
-              </div>
-
-              <div className="border-l-4 border-white pl-12">
-                <div className="text-8xl font-black mb-4">02</div>
-                <h3 className="text-4xl font-bold mb-4">Build</h3>
-                <p className="text-xl text-gray-400 leading-relaxed max-w-2xl">
-                  I design and develop with clean code and modern design
-                </p>
-              </div>
-
-              <div className="border-l-4 border-white pl-12">
-                <div className="text-8xl font-black mb-4">03</div>
-                <h3 className="text-4xl font-bold mb-4">Launch</h3>
-                <p className="text-xl text-gray-400 leading-relaxed max-w-2xl">
-                  Your site goes live in 3–5 days, fully deployed
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="py-40 px-8 lg:px-16">
-          <div className="container mx-auto max-w-7xl">
-            <h2 className="text-7xl lg:text-9xl font-black mb-16 tracking-tighter leading-none">
-              Let's Work<br />Together
-            </h2>
-            <div className="flex flex-col sm:flex-row gap-6 mb-12">
-              <a
-                href="https://wa.me/917391836676"
-                className="bg-black text-white px-16 py-8 rounded-full font-bold text-xl hover:bg-gray-800 transition-all inline-block text-center"
-              >
-                WHATSAPP
-              </a>
-              <a
-                href="mailto:morekunal1335@gmail.com"
-                className="border-4 border-black text-black px-16 py-8 rounded-full font-bold text-xl hover:bg-black hover:text-white transition-all inline-block text-center"
-              >
-                EMAIL
-              </a>
-            </div>
-            <p className="text-gray-400 text-sm tracking-[0.3em]">
-              STARTS AT ₹2,000 • 3-5 DAYS DELIVERY
-            </p>
           </div>
         </section>
 
@@ -305,17 +381,220 @@ const ScrollSequenceWebsite = () => {
                 <p className="font-bold">morekunal1335@gmail.com</p>
               </div>
             </div>
-            <div className="mt-12 pt-8 border-t border-gray-200">
-              <p className="text-gray-400 text-sm">© 2026 Kunal More</p>
-            </div>
           </div>
         </footer>
       </div>
 
-      {/* Debug */}
-      <div className="fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded-lg text-xs font-mono">
-        {currentFrame}/{frameCount}
-      </div>
+      {/* Pricing Calculator Modal */}
+      {showCalculator && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-6xl w-full my-8 max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b-4 border-black p-8 flex justify-between items-center">
+              <h2 className="text-4xl font-black">Project Calculator</h2>
+              <button
+                onClick={() => setShowCalculator(false)}
+                className="text-4xl font-bold hover:bg-gray-100 w-12 h-12 rounded-full"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="p-8 grid lg:grid-cols-2 gap-12">
+              {/* Left: Configuration */}
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-2xl font-bold mb-4">Service Type</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    {[
+                      { value: 'personal', label: 'Personal', price: '₹2K' },
+                      { value: 'business', label: 'Business', price: '₹5K' },
+                      { value: 'ecommerce', label: 'E-commerce', price: '₹10K' },
+                      { value: 'custom', label: 'Custom', price: '₹15K+' }
+                    ].map(service => (
+                      <button
+                        key={service.value}
+                        onClick={() => setSelectedService(service.value)}
+                        className={`p-4 border-2 rounded-xl font-bold transition-all ${selectedService === service.value
+                          ? 'border-black bg-black text-white'
+                          : 'border-gray-200 hover:border-black'
+                          }`}
+                      >
+                        {service.label}
+                        <div className="text-sm font-normal mt-1">{service.price}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-2xl font-bold mb-4 block">Number of Pages</label>
+                  <input
+                    type="range"
+                    min="1"
+                    max="20"
+                    value={selectedOptions.pages}
+                    onChange={(e) => setSelectedOptions({ ...selectedOptions, pages: parseInt(e.target.value) })}
+                    className="w-full"
+                  />
+                  <div className="text-right font-bold text-xl">{selectedOptions.pages} pages</div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold">Features</h3>
+
+                  {[
+                    { key: 'customDomain', label: 'Custom Domain', price: '+₹500' },
+                    { key: 'cms', label: 'Content Management System', price: '+₹2,500' },
+                    { key: 'whatsapp', label: 'WhatsApp Integration', price: '+₹200' },
+                    { key: 'maps', label: 'Google Maps', price: '+₹300' },
+                    { key: 'analytics', label: 'Analytics Dashboard', price: '+₹500' },
+                    { key: 'seo', label: 'Advanced SEO', price: '+₹1,000' },
+                    { key: 'forms', label: 'Contact Forms', price: '+₹500' }
+                  ].map(feature => (
+                    <label key={feature.key} className="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl hover:border-black cursor-pointer transition-all">
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          checked={selectedOptions[feature.key]}
+                          onChange={(e) => setSelectedOptions({ ...selectedOptions, [feature.key]: e.target.checked })}
+                          className="w-6 h-6"
+                        />
+                        <span className="font-semibold">{feature.label}</span>
+                      </div>
+                      <span className="text-sm text-gray-600">{feature.price}</span>
+                    </label>
+                  ))}
+                </div>
+
+                <div>
+                  <h3 className="text-2xl font-bold mb-4">Hosting</h3>
+                  <select
+                    value={selectedOptions.hosting}
+                    onChange={(e) => setSelectedOptions({ ...selectedOptions, hosting: e.target.value })}
+                    className="w-full p-4 border-2 border-gray-200 rounded-xl font-semibold"
+                  >
+                    <option value="free">Free Hosting (Vercel/Netlify)</option>
+                    <option value="premium">Premium Hosting (+₹1,000)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <h3 className="text-2xl font-bold mb-4">Database</h3>
+                  <select
+                    value={selectedOptions.database}
+                    onChange={(e) => setSelectedOptions({ ...selectedOptions, database: e.target.value })}
+                    className="w-full p-4 border-2 border-gray-200 rounded-xl font-semibold"
+                  >
+                    <option value="none">No Database</option>
+                    <option value="mysql">MySQL (+₹1,500)</option>
+                    <option value="mongodb">MongoDB (+₹2,000)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <h3 className="text-2xl font-bold mb-4">Backend</h3>
+                  <select
+                    value={selectedOptions.backend}
+                    onChange={(e) => setSelectedOptions({ ...selectedOptions, backend: e.target.value })}
+                    className="w-full p-4 border-2 border-gray-200 rounded-xl font-semibold"
+                  >
+                    <option value="none">No Backend</option>
+                    <option value="basic">Basic API (+₹3,000)</option>
+                    <option value="advanced">Advanced Backend (+₹7,000)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Right: Form & Summary */}
+              <div className="space-y-8">
+                <div className="bg-black text-white p-8 rounded-2xl sticky top-0">
+                  <h3 className="text-3xl font-black mb-6">Estimated Cost</h3>
+                  <div className="text-7xl font-black mb-8">₹{totalPrice.toLocaleString()}</div>
+                  <div className="text-sm text-gray-400 space-y-2">
+                    <p>• Timeline: 3-7 days</p>
+                    <p>• Free consultation included</p>
+                    <p>• 1 month support</p>
+                  </div>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label className="block font-bold mb-2">Your Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-black outline-none"
+                      placeholder="John Doe"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold mb-2">Email *</label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-black outline-none"
+                      placeholder="john@example.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold mb-2">Phone *</label>
+                    <input
+                      type="tel"
+                      required
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-black outline-none"
+                      placeholder="+91 98765 43210"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold mb-2">Project Description *</label>
+                    <textarea
+                      required
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      rows="4"
+                      className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-black outline-none resize-none"
+                      placeholder="Tell me about your project, goals, and any specific requirements..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-bold mb-2">Timeline</label>
+                    <select
+                      value={formData.timeline}
+                      onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
+                      className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-black outline-none font-semibold"
+                    >
+                      <option value="urgent">Urgent (3-4 days) +20%</option>
+                      <option value="standard">Standard (5-7 days)</option>
+                      <option value="flexible">Flexible (7-14 days) -10%</option>
+                    </select>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full bg-black text-white py-6 rounded-full font-bold text-xl hover:bg-gray-800 transition-all"
+                  >
+                    SEND TO WHATSAPP
+                  </button>
+
+                  <p className="text-xs text-gray-500 text-center">
+                    By submitting, I'll receive your requirements via WhatsApp and respond within 24 hours with a detailed quote.
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
