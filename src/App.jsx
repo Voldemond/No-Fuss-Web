@@ -92,8 +92,7 @@ const ScrollSequenceWebsite = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const maxScroll = window.innerHeight * (frameCount / 20);
-
+      const maxScroll = window.innerHeight * 4;
       const scrollFraction = Math.max(0, Math.min(1, window.scrollY / maxScroll));
       const frameIndex = Math.min(frameCount - 1, Math.floor(scrollFraction * frameCount));
       setCurrentFrame(prev =>
