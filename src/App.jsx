@@ -4,7 +4,7 @@ const ScrollSequenceWebsite = () => {
   const [currentFrame, setCurrentFrame] = useState(1);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const canvasRef = useRef(null);
-  const frameCount = 64;
+  const frameCount = 120;
   const images = useRef([]);
 
   // Pricing Calculator State
@@ -92,10 +92,13 @@ const ScrollSequenceWebsite = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const maxScroll = window.innerHeight * 4;
+      const maxScroll = window.innerHeight * (frameCount / 20);
+
       const scrollFraction = Math.max(0, Math.min(1, window.scrollY / maxScroll));
       const frameIndex = Math.min(frameCount - 1, Math.floor(scrollFraction * frameCount));
-      setCurrentFrame(frameIndex + 1);
+      setCurrentFrame(prev =>
+        prev !== frameIndex + 1 ? frameIndex + 1 : prev
+      );
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -184,7 +187,13 @@ Selected Features:
             <div
               className="text-black max-w-4xl"
               style={{
-                opacity: currentFrame < 30 ? 1 : Math.max(0, 1 - (currentFrame - 30) / 30)
+                opacity:
+                  currentFrame < frameCount * 0.25
+                    ? 1
+                    : Math.max(
+                      0,
+                      1 - (currentFrame - frameCount * 0.25) / (frameCount * 0.25)
+                    )
               }}
             >
               <h1 className="text-8xl lg:text-[12rem] font-black mb-6 tracking-tighter leading-none">
