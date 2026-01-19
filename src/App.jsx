@@ -534,7 +534,7 @@ Selected Features:
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-black outline-none"
-                      placeholder="John Doe"
+                      placeholder="Kunal More"
                     />
                   </div>
 
@@ -546,7 +546,7 @@ Selected Features:
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-black outline-none"
-                      placeholder="john@example.com"
+                      placeholder="kunal@example.com"
                     />
                   </div>
 
@@ -558,7 +558,7 @@ Selected Features:
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-black outline-none"
-                      placeholder="+91 98765 43210"
+                      placeholder="+91 98765 XXXX0"
                     />
                   </div>
 
