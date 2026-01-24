@@ -790,8 +790,8 @@ Selected Features:
                         key={service.value}
                         onClick={() => setSelectedService(service.value)}
                         className={`p-4 border-2 rounded-xl font-bold transition-all ${selectedService === service.value
-                            ? 'border-black bg-black text-white'
-                            : 'border-gray-200 hover:border-black'
+                          ? 'border-black bg-black text-white'
+                          : 'border-gray-200 hover:border-black'
                           }`}
                       >
                         {service.label}
@@ -973,7 +973,7 @@ Selected Features:
 
       {/* Debug Info */}
       <div className="fixed bottom-4 right-4 bg-black/80 text-white px-4 py-2 rounded-lg text-sm">
-        Frame: {currentFrame} / {frameCount}
+        {currentFrame} / {frameCount}
       </div>
     </div>
   );
